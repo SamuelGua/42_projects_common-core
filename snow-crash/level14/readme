@@ -1,0 +1,19 @@
+on ne trouve aucun fichier, auncun element
+est ce qu'il ne faudrait pas utiliser le /bin/getflag
+
+sauf qu'il est bloque en debuggage par un ptrace mais on peut l'outrepasser
+
+on set le result de ptrace a 0 pour passer la verif
+
+on set le uid de flag14 a 3014 au niveau de la fonction getuid
+et on recupere le flag
+
+
+On peut aussi utiliser ce qu'on a dans l execitable du level13 avec la fonction ft_des qui est appele aussi dans getflag et qui permet de traduire la string
+(valable pour tous les levels)
+
+on recupere les string a traduire grace a :strings /bin/getflag
+
+on set la string qu'on veut decrypter dans la fonction ft_des qu'on a vue dans level13 qui permet de traduire la string (avant le strdup)
+set {char[40]}$eax="g <t61:|4_|!@IF.-62FH&G~DCK/Ekrvvdwz?v|"
+et on recupere le dernier flag

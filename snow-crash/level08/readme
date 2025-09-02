@@ -1,0 +1,15 @@
+# Explication de la faille et de l'exploitation
+
+## 1. Analyse du code vulnérable
+
+on trouve deux elements un executable qui prend en parametre un fichier et un fichier avec lequel on ne peut rien faire
+
+si on envoie le fichier token dans notre executable ca ne fonctionne pas 
+
+en analysant l'executable on trouve qu'il faut un fichier token donc on doit trouver un moyen pour lui envoyer le fichier token
+
+on peut link 2 fichiers avec la commande ln. Ainsi quand on envoie notre fichier qu'on a link au fichier token ca va exec le fichier token
+
+ln -s /home/user/level08/token /tmp/test
+
+on obtient un mdp pour flag08 et donc lancer la commande getflag

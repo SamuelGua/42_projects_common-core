@@ -1,0 +1,50 @@
+# Explication de la faille et de l'exploitation
+
+## 1. Analyse du code vulnérable
+
+La ligne suivante est présente dans le fichier PHP :
+
+$a = preg_replace("/(\[x (.*)\])/e", "y(\"\\2\")", $a);
+
+Explication du code :
+
+    preg_replace est une fonction PHP utilisée pour rechercher et remplacer des chaînes en fonction d'une expression régulière.
+    Le paramètre "/(\[x (.*)\])/e" est une expression régulière qui cherche des chaînes de caractères correspondant au format [x {quelque chose}].
+    L'option /e dans preg_replace est une fonctionnalité dangereuse qui permet d'exécuter le contenu de la chaîne de remplacement comme du code PHP. Cela signifie que, si l'expression régulière trouve une correspondance, elle peut exécuter un code PHP à la place du remplacement.
+
+Ici, lorsque le motif \[x (.*)\] est trouvé, il exécute la fonction y("\\2"), où \\2 représente le contenu capturé par (.*) dans l'expression régulière, soit la partie entre les crochets après [x  .]
+
+## 2. La faille - Exécution de code arbitraire
+
+L'utilisation de l'option /e dans preg_replace permet à l'attaquant d'injecter et d'exécuter du code PHP arbitraire en passant un paramètre contrôlé à l'application.
+
+Par exemple, si l'attaquant passe un paramètre comme :
+
+```sh
+[x {${exec(getflag)}}]
+```
+
+Cela entraîne l'exécution de la commande PHP exec(getflag), ce qui va appeler la fonction getflag et récupérer le flag.
+
+## 3. Exploitation de la faille
+
+Pour exploiter cette faille, nous devons injecter une commande PHP valide qui utilise la fonction exec() pour exécuter une commande système et récupérer le flag. Nous passons cette commande comme argument à l'application en créant un fichier avec le contenu suivant :
+
+```sh
+echo '[x {${exec(getflag)}}]' > /tmp/test
+```
+
+Ensuite, nous exécutons le programme level06 en lui passant le fichier créé comme argument :
+
+```sh
+./level06 /tmp/test
+```
+
+## 4. Résultat de l'exécution
+
+Lors de l'exécution, nous obtenons des erreurs PHP, mais la commande a tout de même exécuté et retourné le résultat de la fonction getflag dans le message d'erreur. Le message d'erreur PHP est :
+
+```sh
+PHP Notice:  Use of undefined constant getflag - assumed 'getflag' in /home/user/level06/level06.php(4) : regexp code on line 1
+PHP Notice:  Undefined variable: Check flag.Here is your token : wiok45aaoguiboiki2tuin6ub in /home/user/level06/level06.php(4) : regexp code on line 1
+```

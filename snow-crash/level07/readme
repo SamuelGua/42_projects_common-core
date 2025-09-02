@@ -1,0 +1,17 @@
+# Exploitation basée sur l'environnement LOGNAME
+
+## 1. Analyse du programme
+
+Nous avons un exécutable dans le répertoire home qui affiche simplement le nom de l'utilisateur. Après une analyse du programme (via reverse engineering), nous découvrons que le programme utilise la fonction getenv() pour récupérer la variable d'environnement LOGNAME, puis il affiche via un la fontion systeme en utilisant echo.
+
+## 2. Exploitation de la faille
+
+Pour exploiter cette vulnérabilité, nous pouvons injecter la commande getflag dans la variable d'environnement LOGNAME en procédant comme suit :
+export LOGNAME=";getflag"
+
+## 3. Résultat de l'exécution
+
+En exécutant le programme après avoir manipulé la variable d'environnement LOGNAME, il affichera le résultat de la commande getflag au lieu du nom d'utilisateur. Le flag obtenu sera quelque chose comme :
+
+./executable
+Check flag. Here is your token: fiumuikeil55xe9cu4dood66h

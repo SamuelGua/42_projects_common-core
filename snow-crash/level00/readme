@@ -1,0 +1,53 @@
+# Explication de l'exploitation du niveau flag00
+
+## 1. Trouver les fichiers appartenant à l'utilisateur flag00
+
+La commande suivante permet de rechercher tous les fichiers créés par l'utilisateur flag00 :
+
+```sh
+find / -user flag00 2>&1 | grep -v "Permission"
+```
+
+Explication :
+    find / -user flag00 : Recherche les fichiers appartenant à flag00 sur tout le système (/).
+    2>&1 : Redirige les erreurs vers la sortie standard.
+    grep -v "Permission" : Filtre les erreurs liées aux permissions pour ne garder que les résultats pertinents.
+
+## 2. Résultat de la commande
+
+La commande renvoie les fichiers suivants :
+
+```sh
+[...]
+/usr/sbin/john  
+/rofs/usr/sbin/john
+```
+
+## 3. Lecture du fichier john
+
+On utilise cat pour afficher son contenu :
+
+```sh
+cat /usr/sbin/john
+cdiiddwpgswtgt
+```
+
+Ce texte n'est pas le flag il semble etre chiffre
+
+## 4. Décryptage du mot de passe
+
+Après analyse, nous avons déterminé que le chiffrement utilisé est le chiffre de César avec un décalage de 15 positions.
+
+Définition :
+    Le chiffrement de César est un chiffrement par substitution dans lequel chaque lettre du texte original est remplacée par une lettre située un certain nombre de positions plus loin dans l'alphabet.
+
+En appliquant un décalage inverse de 15 lettres, nous obtenons :
+
+nottoohardhere
+
+## 5. Connexion avec su flag00
+
+Nous utilisons ce mot de passe pour passer à l'utilisateur flag00 :
+
+su flag00
+Mot de passe : nottoohardhere

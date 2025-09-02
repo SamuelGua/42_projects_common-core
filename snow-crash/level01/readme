@@ -1,0 +1,44 @@
+# Exploitation du niveau flag01
+
+## 1. Analyse du fichier /etc/passwd
+
+La commande suivante permet d'afficher le contenu du fichier /etc/passwd :
+
+```sh
+cat /etc/passwd
+[...]
+level14:x:2014:2014::/home/user/level14:/bin/bash
+flag00:x:3000:3000::/home/flag/flag00:/bin/bash
+flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
+flag02:x:3002:3002::/home/flag/flag02:/bin/bash
+[...]
+```
+
+Dans ce fichier, la deuxième colonne correspond au mot de passe chiffré de l'utilisateur. Ici, nous avons :
+
+flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
+
+Le mot de passe chiffré de flag01 est 42hDRfypTqqnw.
+
+## 2. Décryptage avec John the Ripper
+
+John the Ripper (ou JTR) est un logiciel libre permettant de casser des mots de passe chiffrés.
+📌 Installation de John the Ripper (si nécessaire)
+
+```sh
+echo 42hDRfypTqqnw > passtocrack
+cd john/run
+./john ../../passtocrack
+[...]
+abcdefg          (?)
+[...]
+```
+
+Le mot de passe déchiffré est donc abcdefg.
+
+## 3. Connexion avec su flag01
+
+Nous utilisons ce mot de passe pour passer à l'utilisateur flag01 :
+
+su flag01
+Mot de passe : abcdefg

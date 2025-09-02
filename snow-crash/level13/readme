@@ -1,0 +1,9 @@
+on tombe sur un executable qui, lorsqu'on le lance affiche "UID 2013 started us but we we expect 4242", l executable ne prend pas de parametre
+
+on suppose donc qu'il faut executer le programme avec le bon uid qui est 4242
+
+en utilisant gdb on trouve qu'il fait une comparaison entre eax et une variable, eax est le retour de la fonction getuid donc on suppose que l'autre l element vaut 4242
+
+donc si on met un breakpoint au niveau du compare et qu'on modifie la valeur de eax a 4242 on doit pouvoir acceder a l interieur du if 
+
+c'est bien ca et on obtient le flag

@@ -1,0 +1,42 @@
+# Explication de la faille et de l'exploitation
+
+## 1. Analyse du code vulnérable
+
+on retrouve deux fichiers un executable (pas le droit de le reverse) qui prend 1 seul argument et un fichier token que l'on peut afficher
+
+```sh
+level09@SnowCrash:~$ ./level09 /tmp/test
+/uos3ykz|
+level09@SnowCrash:~$ ./level09 /tmp/_
+/uos3d
+level09@SnowCrash:~$ ./level09 /tmp/test_
+/uos3ykz|h
+```
+
+on remarque que pour les trois lignes on a /tmp/ = /uos3 apres reflexion on a 
+
+/ + 0 = /
+t + 1 = u
+m + 2 = o
+p + 3 = s
+/ + 4 = 3
+
+on ajoute au caractere ca position dans la string
+on essaye de faire l'inverse pour qu'apres l'exec on trouve getflag
+
+getflag = gdrch\a
+
+g       = g
+e - 1   = d
+t - 2   = r
+f - 3   = c
+l - 4   = h
+a - 5   = \
+g - 6   = a
+
+marche pas il ne fait que changer les caractere mais n'execute rien
+
+du coup on test d'emvoyer le contenu du fichier token pour le decrypter
+
+on cre un programme en c pour faire la conversion pour nous et on envoie le fichier token dans cette fonction (./a.out $(cat /home/user/level09/token))
+et on obtient le code pour flag09 et donc le flag pour le niveau suivant

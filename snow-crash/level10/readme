@@ -1,0 +1,28 @@
+on a un binaire qui attend un file et un host 
+on peut pas envoyer le fichier token car on a pas les droits pour y acceder
+
+en analysant les fonctions utilisees dans le binaire et les strings on peut deviner le but du binaire:
+    on envoie un fichier sur le host a travers la port 6969
+
+GYDRA :
+    l'executable va lire le fichier et ecrire son contenu dans le fd qui se connect a un serveur
+
+on suppose donc qu'on doit envoyer a un serveur le fichier token dans notre executable
+
+premierement on doit creer un programme qui va faire office de serveur pour recuperer le contenu du fichier envoyer par l'executable
+si on test d'envoyer un fichier 'echo bonjour > /tmp/file' on a bien comme resultat afficher par le serveur "bonjour" 
+
+si on essaye de link notre fichier token avec un fichier accessible ca ne fonctionne pas car l'exec verifie si le fichier est accessible avant de faire quoi que se soit
+
+python server.py 10.12.2.5 6969
+
+Soluce:
+il est possible d'exploiter le "access" (cf man access) pour lui envoyer un fichier accessible pour passer la verif et ensuite modifier ce fichier pour le rediriger
+vers le fichier dont on a pas acces grace a des liens symbolique et donc le open se fera sur le fichier dont on normalement pas acces
+
+le but est de changer la redirection du fichier pour que de base il pointe vers un fichier accessible pour passer le access et de modifier direct apres sur quel fichier
+il redirige (ici notre fichier token pour qu'il open et envoie son contenue a notre serveur)
+
+on cree un script bash qui va tourner en boucle en arriere plan pour modifier le lien symbolique de notre fichier et on execute notre executable avec notre fichier qui va
+rediriger tantot sur le fichier accessible tantot sur le fichier token
+et on espere tomber sur le bon moment pour que notre fichier accessible passe le access et que le lien symbolique change pour que le open s'execute sur le fichier token

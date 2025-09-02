@@ -1,0 +1,15 @@
+on a fichier .lua qui est language un peu equivalent au c
+ce programme fait office de serveur et est deja lance sur la machine il host sur le localhost a travers le port 5151
+
+si on essaye de se connecter dessus grace a nc ca marche et ca nous demande un mdp
+
+on a le hash en dure dans le code on peut essayer de le cracquer avec johnTheRipper => ne donne rien
+
+le io.popen exec une commade on peut exploiter ca
+
+si on essaye d'injecter une commande dans le mpd $(ls) ne se passe rien (mdp incorect)
+mais si on fait une redirection pour ecrire le resultat dans un fichier on a bien les infos dans le fichier 
+on peut donc executer la commande getflag et ecrire le resultat dans un fichier pour obtenir le flag
+
+nc localhost 5151
+Password: $(getflag > /tmp/re)
