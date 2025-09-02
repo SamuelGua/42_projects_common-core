@@ -1,0 +1,68 @@
+{% load static %}
+{% load i18n %}
+<div class="d-flex" style="height: calc(100vh - 100px);">
+	<div class="border border-dark rounded m-2 w-100 px-5 flex-grow-1 d-flex flex-column align-items-center overflow-auto">
+		<div class="fw-bold fs-2 text-light" id="nameUserStats" style="display: none; position: absolute; top: 100px; left: 50px;">Nom de l'utilisateur</div>
+			<div class="d-flex" id="containerCardGameResume">
+				<div id="carouselExampleIndicators" class="carousel slide">
+				<div class="carousel-indicators">
+
+				</div>
+				<div class="carousel-inner">
+				
+				</div>
+				<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">{%trans 'Previous' %}</span>
+				</button>
+				<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">{%trans 'Next' %}</span>
+				</button>
+			</div>
+		</div>
+		<div class="w-100 my-5 stat-container">
+			<h3 class="m-4 fw-bold">{%trans 'Player Statistics' %}</h3>
+			<section id="camembert">
+				<svg id="drawgraph" width="210" height="210" xmlns="http://www.w3.org/2000/svg">
+					<circle cx="100" cy="100" r="80" fill="none" stroke="#ddd" stroke-width="5" />
+				</svg>
+				<ul>
+					<li id="liVert" class="d-flex"><span id="vert"></span> {%trans 'Win :'%}<p id="nb-win" class="ms-2">
+						</p>
+					</li>
+					<li id="liRouge" class="d-flex"><span id="rouge"></span> {%trans 'Loss :' %}<p id="nb-loss" class="ms-2">
+						</p>
+					</li>
+					<li id="liOrange" class="d-flex"><span id="orange"></span> {%trans 'Draw :'%}<p id="nb-draw" class="ms-2">
+						</p>
+					</li>
+				</ul>
+			</section>
+			<div class="m-4 d-flex align-items-center justify-content-center" style="gap: 10%">
+				<li class="d-flex fw-bold" style="list-style-type: none;">
+					{%trans 'Games played: ' %}<p id="nb-game" class="mx-2"></p>
+				</li>
+				<li class="d-flex fw-bold" style="list-style-type: none;">
+					{%trans 'Win rate : ' %}<p class="fw-bold mx-2" id="win-rate"></p>
+				</li>
+			</div>
+		</div>
+	</div>
+</div>
+
+<template id="cardGameResume">
+	<div class="card-custom m-3">
+		<img data-img-opponent src="{% static 'img/bob.jpg' %}" class="rounded img-profil-100" alt="img-profil">
+		<p data-opponent class="mt-2 text-light flex-wrap" style="cursor: pointer; font-size: 1.5rem; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Bob</p>
+		<p data-score class="text-light">0 - 0</p>
+		<p class="result text-light" style="font-size: 1.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" data-winner>{%trans 'Win' %}</p>
+		<p data-date class="text-light">{%trans 'Unknown Date' %}</p>
+	</div>
+</template>
+
+<template id="gameNotFound">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px;">
+        <p class="fw-bold fs-1 text-warning">{% trans 'Game not found' %}</p>
+    </div>
+</template>

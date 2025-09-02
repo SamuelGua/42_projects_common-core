@@ -1,0 +1,38 @@
+{% load static %}
+{% load i18n %}
+<form class="d-flex" style="height: calc(100vh - 80px); min-height: 450px;" id="createAccountForm" method="POST">
+	{% csrf_token %}
+	<div class="mb-3 mx-2 my-2 w-75 flex-grow-1 d-flex align-items-center justify-content-center">
+		<div class="row w-100 align-items-center mx-5">
+			<div class="col-lg d-flex justify-content-center position-relative">
+				<input type="file" id="profileImageInput" accept="image/*" style="display: none;" />
+				<a class="btn profile-btn" id="profileImageButton">
+					<img id='avatar' src='media/avatars/default_avatar.png' style="height: 250px; width: 200px; color: black;" alt="">
+				</a>
+				<i class="bi bi-pencil-square icon-overlay position-absolute"></i>
+			</div>
+			<div class="col-lg w-100">
+				<div class="form-floating form-floating-create mb-3">
+					<input type="email" class="form-control" id="floatingInputEmail" name="email" placeholder="name@example.com" required value="{{ email }}">
+					<label for="floatingInputEmail">{%trans 'Email address' %}</label>
+				</div>
+				<div class="form-floating form-floating-create mb-3">
+					<input type="text" class="form-control" id="floatingInputUsername" name="username" placeholder="Buzz" required value="{{ username }}">
+					<label for="floatingInputUsername">{%trans 'Username' %}</label>
+				</div>
+				<div class="form-floating form-floating-create mb-3">
+					<input type="password" class="form-control" id="floatingInputPassword" name="password" required>
+					<label for="floatingInputPassword">{%trans 'Password' %}</label>
+				</div>
+				<div class="form-floating form-floating-create mb-3">
+					<input type="password" class="form-control" id="floatingInputPassword2" name="password2" required>
+					<label for="floatingInputPassword2">{%trans 'Confirm Password' %}</label>
+				</div>
+			</div>
+			<div class="d-flex align-items-center justify-content-center mt-3">
+				<button type="button" class="btn btn-primary my-3" id="submitButton">{%trans 'Create account' %}</button>
+				<a class="btn btn-primary my-3 ms-5" onclick="loadConnectPage()">{%trans 'Go back' %}</a>
+			</div>
+		</div>
+	</div>
+</form>

@@ -1,0 +1,27 @@
+ {% load static %}
+ {% load i18n %}
+<div class="d-flex" style="height: calc(100vh - 80px);">
+	<div class="mx-2 my-2 w-100 d-flex flex-column">
+		<div class="border border-dark rounded mb-3 d-flex flex-column justify-content-center align-items-center overflow-hidden" style="height: calc(100vh - 80px); min-height: 300px;">
+			<a class="btn btn-primary btn-lobby shadow my-3 w-75 text-nowrap" onclick="loadTournament()" role="button"><p class="my-1">{%trans 'Tournament' %}</p></a>
+			<a class="btn btn-primary btn-lobby shadow my-3 w-75 text-nowrap" onclick="loadPublic()" role="button"><p class="my-1">{%trans 'Quick Game' %}</p></a>
+			<a class="btn btn-primary btn-lobby shadow my-3 w-75 text-nowrap" onclick="loadPrivate()" role="button"><p class="my-1">{%trans 'Private Game' %}</p></a>
+			<a class="btn btn-primary btn-lobby shadow my-3 w-75 text-nowrap" onclick="loadLocal()" role="button"><p class="my-1">{%trans 'Local Game' %}</p></a>
+		</div>
+	</div>
+</div>
+
+<div class="language-switcher position-absolute bottom-0 end-0 p-3 d-flex gap-2">
+	<form action="{% url 'set_language' %}" method="post">
+		{% csrf_token %}
+		<button name="language" value="en" class="btn btn-link p-0">
+			<img src="{% static 'img/flag-en.png' %}" alt="English" style="width: 32px; height: 20px;">
+		</button>
+		<button name="language" value="fr" class="btn btn-link p-0">
+			<img src="{% static 'img/flag-fr.png' %}" alt="Français" style="width: 32px; height: 20px;">
+		</button>
+		<button name="language" value="es" class="btn btn-link p-0">
+			<img src="{% static 'img/flag-es.png' %}" alt="Español" style="width: 32px; height: 20px;">
+		</button>
+	</form>
+</div>

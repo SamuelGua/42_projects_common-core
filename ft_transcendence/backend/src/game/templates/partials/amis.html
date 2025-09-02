@@ -1,0 +1,74 @@
+{% load i18n %}
+{% load static %}
+<div class="d-flex flex-column border border-dark m-2 rounded" style="height: calc(100vh - 80px);">
+    <!-- Barre de recherche et filtres -->
+    <div class="d-flex justify-content-between p-2">
+        <input id="search_user" type="text" placeholder="{% trans 'Search user' %}" class="form-control"
+            style="width: 250px; height: 35px;">
+        <button id="showAllUserBtn" class="btn btn-primary">{% trans 'Display all users' %}</button>
+        <button id="showFriendsBtn" class="btn btn-primary">{% trans 'Display friends' %}</button>
+        <button id="showBlockedBtn" class="btn btn-primary">{% trans 'Display blocked users' %}</button>
+        <script src="{% static 'js/amis.js' %}?v={{ timestamp }}"></script>
+    </div>
+
+    <div id="list" class="mx-2 my-2 w-100 flex-grow-1 d-flex flex-column overflow-auto">
+        <!-- Les utilisateurs seront ajoutés ici dynamiquement -->
+    </div>
+</div>
+<template id="user-template">
+    <div class="friends_info my-2 d-flex justify-content-between align-items-center border-bottom border-3"
+        style="margin-inline: 10%; min-width: 450px;">
+        <div class="d-flex mx-3 my-1">
+            <i data-icon data_name="" class="status bi bi-circle-fill ${isOnline ? 'text-success' : 'text-secondary'}"></i>
+            <img src="" class="img-profil-60" alt="img-profil" data-user-avatar>
+            <div class="ms-5">
+                <h5 class="text fw-bold ms-5" data-user-name style="color: white; cursor: pointer;">{{ user.username }}</h5>
+                <p class="text ms-4" data-user-stats>
+                <div class="d-flex flex-wrap">
+                    <span class="me-3" style="color: white;">
+                        {% trans 'Games Played' %}: <p class='mx-2' data-game-played style="display: inline;"></p> 🕹️
+                    </span>
+                    <span class="me-3" style="color: white;">
+                        {% trans 'Wins' %}: <p class='mx-2' data-win style="display: inline;"></p> 🏆
+                    </span>
+                <!-- </div>
+                <div class="d-flex flex-wrap"> -->
+                    <span class="me-3" style="color: white;">
+                        {% trans 'Losses ' %}: <p class='mx-2' data-lose style="display: inline;"></p> 💀
+                    </span>
+                    <span class="me-3" style="color: white;">
+                        {% trans 'Ratio ' %}: <p class='mx-2' data-ratio style="display: inline;"></p> ⚖️
+                    </span>
+                </div>
+                </p>
+            </div>
+        </div>
+        <button class="btn btn-primary btn-add shadow hover-container" role="button" id="invitePlayer">
+            <i class="bi bi-joystick"></i>
+            <div class="hover-text">{% trans 'Invite' %}</div>
+        </button>
+        <div class="action-buttons" data-action-buttons>
+        </div>
+    </div>
+</template>
+
+<template id="action-buttons-template">
+    <div class="d-flex">
+        <button class="btn btn-primary btn-add shadow hover-container" role="button" data-action="add">
+            <i class="bi bi-person-plus-fill"></i>
+            <div class="hover-text">{% trans 'Add' %}</div>
+        </button>
+        <button class="btn btn-primary btn-add shadow hover-container" role="button" data-action="remove">
+            <i class="bi bi-person-x-fill"></i>
+            <div class="hover-text">{% trans 'Remove' %}</div>
+        </button>
+        <button class="btn btn-primary btn-add shadow hover-container" role="button" data-action="block">
+            <i class="bi bi-person-dash"></i>
+            <div class="hover-text">{% trans 'Block' %}</div>
+        </button>
+        <button class="btn btn-primary btn-add shadow hover-container" role="button" data-action="unblock">
+            <i class="bi bi-person-check"></i>
+            <div class="hover-text">{% trans 'Unblock' %}</div>
+        </button>
+    </div>
+</template>

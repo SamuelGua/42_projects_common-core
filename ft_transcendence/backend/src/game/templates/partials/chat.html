@@ -1,0 +1,49 @@
+{% load i18n %}
+{% load static %}
+<div class="d-flex" style="height: calc(100vh - 80px); min-height: 450px;">
+	<div class="mb-3 mx-2 my-2 w-75 flex-grow-1 d-flex align-items-center justify-content-center">
+		<div id="container-chat" class="mx-3 border rounded">
+			<div id="sidebar" class="p-3 border rounded">
+				
+				<form class="mb-4">
+					<div class="input-group border rounded">
+						<input type="text" class="form-control" id="userSearchInput" placeholder="{%trans 'Search user' %}" aria-label="Recherche">
+						<span class="input-group-text">
+							<i class="bi bi-search"></i> 
+						</span>
+					</div>
+				</form>
+			
+				
+				<div id="userList">
+					
+				</div>
+			</div>
+			<div id="chat-area" class="border rounded" style="visibility: hidden;">
+
+				<p id="no-conversation" class="align-middle" style="display: flex; align-items: center; justify-content: center; height: 100%; margin: 0; visibility: visible;">
+					{%trans 'Nothing here, open a conversation' %}
+				</p>
+				<div class="chat-header d-flex align-items-center border rounded">
+					
+					<img id="avatarFriend" src="" alt="" class="rounded-circle me-3">
+					<div class="contact-details">
+						<strong>{%trans 'Start a chat with someone'%}</strong>
+					</div>
+				</div>
+				<div class="messages-container">
+					
+
+				</div>
+				<div class="chat-footer">
+					<form id="message-form" class="d-flex">
+						<textarea type="text" id="message-input" class="form-control me-2" placeholder="Write your best win 😈" autocomplete="off" required></textarea>
+						<button type="submit" class="btn btn-primary" id="sendMSG">
+							<img src="{% static 'chat/img/envoyer.png' %}" alt="Envoyer">
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
